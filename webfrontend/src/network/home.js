@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-18 11:46:40
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-10 13:47:53
+ * @LastEditTime: 2020-03-11 21:11:29
  * @FilePath: \webfrontend\src\network\home.js
  */
 import {request} from "./request";
@@ -48,6 +48,13 @@ export function addSupplierInfo(data){
   return request({
     method:'post',
     url:'/api/suppliers',
+    data:data
+  })
+}
+export function addSalesInfo(data){
+  return request({
+    method:'post',
+    url:'/api/sales',
     data:data
   })
 }

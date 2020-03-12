@@ -9,6 +9,7 @@ const store = new VueX.Store({
     //存储token
     Authorization:sessionStorage.getItem('Authorization') ? sessionStorage.getItem('Authorization') : '',
     USER_ACCOUNT:sessionStorage.getItem('USER_ACCOUNT')?sessionStorage.getItem('USER_ACCOUNT'):'',
+    USER_ACCOUNT_ID:sessionStorage.getItem('USER_ACCOUNT_ID')?sessionStorage.getItem('USER_ACCOUNT_ID'):'',
   },
   mutations: {
     //2.赋值
@@ -19,6 +20,10 @@ const store = new VueX.Store({
     SET_ACCOUNT_NAME:(state,accountName) =>{
       state.USER_ACCOUNT = accountName
       sessionStorage.setItem('USER_ACCOUNT',accountName)
+    },
+    SET_ID:(state,id) =>{
+      state.USER_ACCOUNT_ID = id
+      sessionStorage.setItem('USER_ACCOUNT_ID',id)
     }
   },
   actions: {
@@ -30,11 +35,17 @@ const store = new VueX.Store({
       commit
     },accountName){
       commit('SET_ACCOUNT_NAME',accountName)
+    },
+    SaveId({
+      commit
+    },id){
+      commit('SET_ID',id)
     }
   },
   getters:{
     //4. 将值注入到state中的变量中去
-    USER_ACCOUNT:state => state.USER_ACCOUNT
+    USER_ACCOUNT:state => state.USER_ACCOUNT,
+    USER_ACCOUNT_ID:state => state.USER_ACCOUNT_ID
   },
   modules: {
   }

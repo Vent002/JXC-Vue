@@ -13,6 +13,10 @@ const InStore =() => import('@/views/store/InStore')
 const OrderInfo =() => import('@/views/store/OrderInfo')
 const SalesInfo =() =>　import('@/views/sales/SalesInfo')
 const SalesOut =() => import('@/views/sales/SalesOut')
+const Replenish =() => import('@/views/sales/ReplenishShop')
+const VerifyCheck =() => import('@/views/sales/VerifyCheck')
+const Verify =() => import('@/views/sales/verify/Verify')
+const CheckSales =() => import('@/views/sales/verify/CheckSales')
 const notFount =() => import('@/views/sys/NotFound')
 
 Vue.use(VueRouter)
@@ -57,15 +61,15 @@ const routes = [
       {
         path:'',
         name:'首页',
-        redirect:'/main'
+        redirect:'/home/main'
       },
       {
-        path:'/main',
+        path:'/home/main',
         name:'首页',
         component:main
       },
       {
-        path:'/account',
+        path:'/home/account',
         name:'账号管理',
         component:Account,
         meta:{
@@ -73,7 +77,7 @@ const routes = [
         }
       },
       {
-        path:'/customer',
+        path:'/home/customer',
         name:'客户管理',
         component:CustomerInfo,
         meta:{
@@ -81,41 +85,67 @@ const routes = [
         }
       },
       {
-        path:'/supplier',
+        path:'/home/supplier',
         component:SupplierInfo,
         mete:{
           title:'供货商管理'
         }
       },
       {
-        path:'/goods',
+        path:'/home/goods',
         name:'商品种类',
         component:GoodsType
       },
       {
-        path:'/inventory',
+        path:'/home/inventory',
         name:'库存盘点',
         component:Inventory
       },
       {
-        path:'/inStore',
+        path:'/home/inStore',
         name:'订单入库',
         component:InStore
       },
       {
-        path:'/order',
+        path:'/home/order',
         name:'采购订单',
         component:OrderInfo
       },
       {
-        path:'/sales',
+        path:'/home/sales',
         name:'销售订单',
         component:SalesInfo
       },
       {
-        path:'/salesOut',
+        path:'/home/salesOut',
         name:'销售出库',
         component:SalesOut
+      },
+      {
+        path:'/home/replenish',
+        name:'店铺补货',
+        component:Replenish
+      },
+      {
+        path:'/home/verify',
+        component:VerifyCheck,
+        children:[
+          {
+              path:'',
+              name:'审核补货单',
+              redirect:'/home/verify/replenish'
+          },
+          {
+            path:'/home/verify/replenish',
+            name:'审核补货单',
+            component:Verify,
+          },
+          {
+            path:'/home/verify/check',
+            name:'验收销售单',
+            component:CheckSales,
+          }
+      ]
       }
     ]
   },

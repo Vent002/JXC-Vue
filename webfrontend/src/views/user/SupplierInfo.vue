@@ -186,7 +186,7 @@
               :label="item.city_name"
               :value="item.city_name"
             ></el-option>
-          </el-select>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="  详细地址    " :label-width="formLabelWidth" prop="detailsAddress">

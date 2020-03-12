@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2020-03-04 09:21:12
+ * @LastEditors: gxm
+ * @LastEditTime: 2020-03-12 20:52:58
+ * @FilePath: \webfrontend\src\views\sys\NotFound.vue
+ -->
 <template>
   <div>
     <div class="main" v-title data-title="404"></div>
@@ -25,7 +31,7 @@
             }else{
               this.countDown = 5
               this.$router.push({
-                path:'/main'
+                path:'/home/main'
               })
             }
           },1000)

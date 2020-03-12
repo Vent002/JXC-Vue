@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-16 13:59:52
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-09 10:41:30
+ * @LastEditTime: 2020-03-12 11:54:13
  * @FilePath: \webfrontend\src\network\request.js
  */
 import axios from 'axios'
@@ -62,6 +62,9 @@ export function request(config) {
           break
         case 1003:
           alert('不能修改自己的状态');
+          return false
+        case 10002:
+          alert('输入有误')
           return false
       }
       return resolve(res.data)

@@ -236,6 +236,7 @@
           this.inventoriesInfosEcharts.forEach(element =>{
             this.goodsTypeName.push(element.name)
           })
+          this.loading = false
         }).catch(err =>{
           console.log(err)
         })
@@ -251,7 +252,6 @@
 
       //绘制图表
       this.inventoryChart.setOption(this.option)
-      this.loading = false
       //不加的效果（当浏览器窗口缩小的时候,超过了div的界限（红色边框）)
       // window.addEventListener("resize",function(){
       //   this.inventoryChart.resize()
