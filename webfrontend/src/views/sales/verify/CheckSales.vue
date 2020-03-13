@@ -11,7 +11,7 @@
     <el-card class="applyGoodsCard">
 
       <el-table fit
-                :data="applyGoodsList"
+                :data="verifyGoodsInfo"
                 style="width: 100%">
         <el-table-column label="#"
                          type='index'
@@ -87,6 +87,7 @@
 
 <script>
 import { request } from '../../../network/request'
+import { updateSalesStatus } from '../../../network/home'
 const BreadCrumb = () => import('../../../components/BreadCrumb')
 import { mapGetters } from 'vuex'
 export default {
@@ -96,19 +97,8 @@ export default {
   },
   data() {
     return {
-      //商品名称
-      selectGoodsTypeName:[],
       //数据库获取数据
-      applyGoodsList:[],
-      //申请数据
-      applyGoodsCount: {
-        goodsTypeName: '',
-        goodsCount: '',
-        applyName: ''
-      },
-      formApplyInfoRule:{},
-      formLabelWidth: '100px',
-      addSalesInfoVisible: false,
+      verifyGoodsInfo:[],
        //分页操作数据
       currentPage: 1, //当前页
       pageSizes: [5, 8, 10],
@@ -126,50 +116,51 @@ export default {
     })
   },
   methods:{
-    verifyStatus(goods){},
-    applyGoodsInfo(){},
-    closeApplyGoodsDialog(){
-      this.applyGoodsCount = {}
-      this.addSalesInfoVisible = false
+    verifyStatus(goods){
+      let goodsId = goods.id
+
+      updateSalesStatus(goodsId).then(res => {
+
+        this.applyGoodsInfo()
+        this.$message({
+            type: 'success',
+            message: '已审核'
+          });
+      }).catch(err =>{
+        console.log(err)
+      })
+    },
+    applyGoodsInfo(){
+      this.loading = true
+      request({
+        method: 'get',
+        url: '/api/sales/verify/'+this.currentPage+'/'+this.pageSize
+      }).then(res => {
+        let salesInfoResult = JSON.parse(res.data.verifySales)
+        console.log(salesInfoResult)
+        this.verifyGoodsInfo = salesInfoResult.list
+        this.total = salesInfoResult.total
+        this.loading = false
+      })
+      .catch(err => {
+        console.log(err)
+        this.loading = false
+        //alert(err)
+        //刷新页面
+      })
     },
     handleSizeChange(size) {
       this.currentPage = 1 //第一页
       this.pageSize = size //每页先显示多少数据
-      this.getSalesPageInfo()
+      this.applyGoodsInfo()
     },
     handleCurrentChange(page) {
       this.currentPage = page
-      this.getSalesPageInfo()
-    },
-    getGoodsName() {
-      this.loading = true
-      request({
-        method: 'get',
-        url: '/api/sales'
-      })
-        .then(res => {
-          console.log(res)
-          let salesInfoResult = JSON.parse(res.data.salesInfoList)
-
-          //将商品种类名称存入
-          for (let key in salesInfoResult) {
-            this.selectGoodsTypeName.push(
-              salesInfoResult[key].goodsTypeName
-            )
-          }
-
-          this.loading = false
-        })
-        .catch(err => {
-          console.log(err)
-          this.loading = false
-          alert(err)
-          //刷新页面
-        })
+      this.applyGoodsInfo()
     },
   },
   created(){
-    this.getGoodsName()
+    this.applyGoodsInfo()
   }
 }
 </script>

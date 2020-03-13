@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-16 13:59:52
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-12 11:54:13
+ * @LastEditTime: 2020-03-13 13:12:44
  * @FilePath: \webfrontend\src\network\request.js
  */
 import axios from 'axios'
@@ -45,6 +45,7 @@ export function request(config) {
           break
         case 401:
           alert('您没有权限')
+          router.go(0)
           return false
         case 404:
           router.replace({
@@ -58,10 +59,12 @@ export function request(config) {
           })
           break
         case 500:
-          console.log('Server Internal Error');
+          alert('Server Internal Error')
+          router.go(0)
           break
         case 1003:
           alert('不能修改自己的状态');
+          router.go(0)
           return false
         case 10002:
           alert('输入有误')

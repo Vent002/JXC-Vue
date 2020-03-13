@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <div class="main"
          v-title
          data-title="补货申请"></div>
@@ -27,7 +27,7 @@
                          label="登记日期"
                          fit>
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.saleDate }}</span>
+            <span style="margin-left: 10px">{{ scope.row.applyDate }}</span>
           </template>
         </el-table-column>
 
@@ -35,7 +35,7 @@
                          label="商品名称"
                          fit>
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.goodsTypeInfo.goodsTypeName }}</span>
+            <span style="margin-left: 10px">{{scope.row.inventoryInfo.goodsTypeInfo.goodsTypeName }}</span>
           </template>
         </el-table-column>
 
@@ -44,23 +44,23 @@
                          sortable
                          fit>
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.saleCount }}</span>
+            <span style="margin-left: 10px">{{ scope.row.applyCounts }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column prop="employeeAccount"
+        <el-table-column prop="applyePersonName"
                          label="申请人"
                          fit>
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.employeeAccount }}</span>
+            <span style="margin-left: 10px">{{ scope.row.applyPersonName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column prop="employeeAccount"
+        <el-table-column prop="status"
                          label="申请状态"
                          fit>
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.employeeAccount }}</span>
+            <span style="margin-left: 10px">{{ scope.row.applyDesc }}</span>
           </template>
         </el-table-column>
 
@@ -99,7 +99,7 @@
 
         <el-form-item label="商品名称"
                       :label-width="formLabelWidth"
-                      prop="goodsCount">
+                      prop="goodsTypeName">
           <el-select size="small"
                      v-model="applyGoodsCount.goodsTypeName"
                      style="width:50%"
@@ -139,6 +139,7 @@
 
 <script>
 import { request } from '../../network/request'
+import { applyGoodsToShop } from '../../network/home'
 const BreadCrumb = () => import('../../components/BreadCrumb')
 import { mapGetters } from 'vuex'
 export default {
@@ -147,18 +148,40 @@ export default {
     BreadCrumb
   },
   data() {
+    let checkFormGoodsTypeName = (rule, value, callback) => {
+      if (value == '') {
+        return callback(new Error('请选择商品类型'))
+      } else {
+        return callback()
+      }
+    }
+    let checkFormSalesCounts = (rule, value, callback) => {
+      if (value == '') {
+        return callback(new Error('请输入入库数量'))
+      } else {
+        return callback()
+      }
+    }
     return {
+      //申请状态
       //商品名称
       selectGoodsTypeName:[],
+      //商品数据
+      salesInfoResult:[],
+      goodsTypeInfo:[],
       //数据库获取数据
       applyGoodsList:[],
       //申请数据
       applyGoodsCount: {
+        goodsTypeId:Number ,
         goodsTypeName: '',
         goodsCount: '',
         applyName: ''
       },
-      formApplyInfoRule:{},
+      formApplyInfoRule:{
+        goodsTypeName:[{validator:checkFormGoodsTypeName,trigger:'blur'}],
+        goodsCount:[{validator:checkFormSalesCounts,trigger:'blur'}],
+      },
       formLabelWidth: '100px',
       addSalesInfoVisible: false,
        //分页操作数据
@@ -178,7 +201,56 @@ export default {
     })
   },
   methods:{
-    applyGoodsInfo(){},
+    //获取当前用户申请信息
+    getApplyInfoByEmployeeName(){
+      this.loading = true
+      let userAccount = this.userAccount
+      request({
+        method:'get',
+        url:`/api/apply/employee/${this.currentPage}/${this.pageSize}/query?query=${userAccount}`
+      }).then(res =>{
+        let result = JSON.parse(res.data.applyList)
+        this.applyGoodsList = result.list
+        this.total = result.total
+        this.loading = false
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    //申请
+    applyGoodsInfo(){
+      this.$refs.formApplyInfoRule.validate(valid =>{
+        if(valid){
+          this.btnloading = true
+          this.applyGoodsCount.applyName = this.userAccount
+          this.salesInfoResult.forEach(element =>{
+            if(element.goodsTypeName === this.applyGoodsCount.goodsTypeName){
+              this.applyGoodsCount.goodsTypeId = element.goodsTypeId
+              return
+            }
+          })
+          let data = new Object(this.applyGoodsCount)
+          applyGoodsToShop(data).then(res => {
+            if(res.code === 200){
+              this.addSalesInfoVisible = false
+              this.btnloading = false
+              this.$message({
+                type:'success',
+                message:'申请成功，请等待审核'
+              })
+              this.getApplyInfoByEmployeeName()
+            }else{
+              this.$message.error("申请失败，请重新申请")
+              this.btnloading = false
+            }
+          }).catch(err =>{
+            this.btnloading = false
+            console.log(err)
+          })
+        }
+      })
+    },
+
     closeApplyGoodsDialog(){
       this.applyGoodsCount = {}
       this.addSalesInfoVisible = false
@@ -199,28 +271,32 @@ export default {
         url: '/api/sales'
       })
         .then(res => {
-          console.log(res)
-          let salesInfoResult = JSON.parse(res.data.salesInfoList)
+          this.salesInfoResult = JSON.parse(res.data.salesInfoList)
 
           //将商品种类名称存入
-          for (let key in salesInfoResult) {
+          for (let key in this.salesInfoResult) {
             this.selectGoodsTypeName.push(
-              salesInfoResult[key].goodsTypeName
+              this.salesInfoResult[key].goodsTypeName
             )
           }
-
+          for(let key in this.salesInfoResult){
+            this.goodsTypeInfo.push({
+              goodsTypeId:this.salesInfoResult[key].goodsTypeId,
+              goodsTypeName:this.salesInfoResult[key].goodsTypeName
+            })
+          }
           this.loading = false
         })
         .catch(err => {
           console.log(err)
           this.loading = false
-          alert(err)
           //刷新页面
         })
     },
   },
   created(){
     this.getGoodsName()
+    this.getApplyInfoByEmployeeName()
   }
 }
 </script>

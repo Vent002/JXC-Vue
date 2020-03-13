@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-18 11:46:40
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-11 21:11:29
+ * @LastEditTime: 2020-03-13 17:33:45
  * @FilePath: \webfrontend\src\network\home.js
  */
 import {request} from "./request";
@@ -55,6 +55,19 @@ export function addSalesInfo(data){
   return request({
     method:'post',
     url:'/api/sales',
+    data:data
+  })
+}
+export function updateSalesStatus(id) {
+  return request({
+    method:'put',
+    url:`/api/sales/verify/`+id,
+  })
+}
+export function applyGoodsToShop(data){
+  return request({
+    method:'post',
+    url:'/api/apply',
     data:data
   })
 }
