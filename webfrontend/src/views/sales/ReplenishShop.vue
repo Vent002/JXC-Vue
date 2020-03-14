@@ -128,7 +128,7 @@
         </el-form-item>
 
         <el-button @click.native="closeApplyGoodsDialog()">取 消</el-button>
-        <el-button v-loading="btnloading"
+        <el-button :loading="btnloading"
                    type="primary"
                    @click="applyGoodsInfo('formApplyInfoRule')">确 定</el-button>
       </el-form>

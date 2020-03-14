@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-03-02 21:25:55
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-12 18:16:22
+ * @LastEditTime: 2020-03-14 12:12:19
  * @FilePath: \webfrontend\src\views\sales\SalesOut.vue
  -->
 <template>
@@ -139,7 +139,8 @@ export default {
         })
         .catch(err => {
           console.log(err)
-          alert(err)
+          this.loading = false
+          this.$router.go(0)
           // if(err==='Network Error'){
           //刷新页面
           // }

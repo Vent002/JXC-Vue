@@ -32,8 +32,8 @@
     data() {
       return {
         ruleForm: {
-          username: 'yuan001',
-          password: 'yuan001',
+          username: 'admin',
+          password: 'admin',
         },
         rules: {
           username: [
@@ -77,7 +77,7 @@
                     this.$router.replace({
                       path:'/home'
                     })
-                  },2000)
+                  },500)
                 }else{
                   this.$notify.error({
                     title: '登录提示',
