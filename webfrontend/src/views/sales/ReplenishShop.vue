@@ -20,11 +20,13 @@
                 style="width: 100%">
         <el-table-column label="#"
                          type='index'
+                         align="center"
                          fit>
         </el-table-column>
 
         <el-table-column prop="num"
                          label="登记日期"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.applyDate }}</span>
@@ -33,6 +35,7 @@
 
         <el-table-column prop="name"
                          label="商品名称"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{scope.row.inventoryInfo.goodsTypeInfo.goodsTypeName }}</span>
@@ -41,6 +44,7 @@
 
         <el-table-column prop="date"
                          label="申请数量"
+                         align="center"
                          sortable
                          fit>
           <template slot-scope="scope">
@@ -50,6 +54,7 @@
 
         <el-table-column prop="applyePersonName"
                          label="申请人"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.applyPersonName }}</span>
@@ -58,6 +63,7 @@
 
         <el-table-column prop="status"
                          label="申请状态"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.applyDesc }}</span>

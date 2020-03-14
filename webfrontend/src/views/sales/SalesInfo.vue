@@ -77,11 +77,13 @@
                     style="width: 100%">
             <el-table-column label="#"
                              type='index'
+                             align="center"
                              fit>
             </el-table-column>
 
             <el-table-column prop="num"
                              label="登记日期"
+                             align="center"
                              fit>
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row.saleDate }}</span>
@@ -90,6 +92,7 @@
 
             <el-table-column prop="name"
                              label="商品名称"
+                             align="center"
                              fit>
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row.goodsTypeInfo.goodsTypeName }}</span>
@@ -98,6 +101,7 @@
 
             <el-table-column prop="date"
                              label="销售数量"
+                             align="center"
                              sortable
                              fit>
               <template slot-scope="scope">
@@ -107,6 +111,7 @@
 
             <el-table-column prop="price"
                              label="价格"
+                             align="center"
                              sortable
                              fit>
               <template slot-scope="scope">
@@ -116,6 +121,7 @@
 
             <el-table-column prop="desc"
                              label="售卖人"
+                             align="center"
                              fit>
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row.employeeAccount }}</span>

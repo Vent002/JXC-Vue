@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-16 13:59:52
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-13 13:12:44
+ * @LastEditTime: 2020-03-14 19:43:49
  * @FilePath: \webfrontend\src\network\request.js
  */
 import axios from 'axios'
@@ -31,7 +31,6 @@ export function request(config) {
       if(sessionStorage.getItem('Authorization')){
         config.headers.Authorization = `${sessionStorage.getItem('Authorization')}`
       }
-      console.log(config)
       config.url = config.url.slice(4)
       return config
     },error => {

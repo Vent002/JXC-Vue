@@ -15,11 +15,13 @@
                 style="width: 100%">
         <el-table-column label="#"
                          type='index'
+                         align="center"
                          fit>
         </el-table-column>
 
         <el-table-column prop="num"
                          label="销售日期"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.saleDate }}</span>
@@ -28,6 +30,7 @@
 
         <el-table-column prop="name"
                          label="商品名称"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.goodsTypeInfo.goodsTypeName }}</span>
@@ -36,6 +39,7 @@
 
         <el-table-column prop="date"
                          label="销售数量"
+                         align="center"
                          sortable
                          fit>
           <template slot-scope="scope">
@@ -45,6 +49,7 @@
 
         <el-table-column prop="employeeAccount"
                          label="责任人"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.employeeAccount }}</span>
@@ -53,6 +58,7 @@
 
         <el-table-column prop="employeeAccount"
                          label="操作"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <div slot="reference" class="name-wrapper">
@@ -82,6 +88,7 @@
           </div>
 
     </el-card>
+
   </div>
 </template>
 

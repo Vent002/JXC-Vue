@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-12 15:38:22
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-08 20:18:26
+ * @LastEditTime: 2020-03-14 19:58:50
  * @FilePath: \webfrontend\src\main.js
  */
 import Vue from 'vue'

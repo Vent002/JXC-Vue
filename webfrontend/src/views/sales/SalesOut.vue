@@ -1,17 +1,17 @@
 <!--
  * @Date: 2020-03-02 21:25:55
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-14 12:12:19
+ * @LastEditTime: 2020-03-14 22:13:31
  * @FilePath: \webfrontend\src\views\sales\SalesOut.vue
  -->
 <template>
   <div v-loading="loading">
     <div class="main"
          v-title
-         data-title="销售出库"></div>
+         data-title="店铺库存"></div>
     <bread-crumb>
       <el-breadcrumb-item slot="first">销售管理</el-breadcrumb-item>
-      <el-breadcrumb-item slot="second">销售出库</el-breadcrumb-item>
+      <el-breadcrumb-item slot="second">店铺库存</el-breadcrumb-item>
     </bread-crumb>
 
     <el-card class="salesOutCard">
@@ -20,11 +20,13 @@
                 style="width: 100%">
         <el-table-column label="#"
                          type='index'
+                         align="center"
                          fit>
         </el-table-column>
 
         <el-table-column prop="num"
                          label="商品编号"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.inventoryInfo.goodsTypeNum}}</span>
@@ -33,6 +35,7 @@
 
         <el-table-column prop="name"
                          label="商品名称"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.goodsTypeInfo.goodsTypeName }}</span>
@@ -41,6 +44,7 @@
 
         <el-table-column prop="date"
                          label="店内数量"
+                         align="center"
                          sortable
                          fit>
           <template slot-scope="scope">
@@ -51,6 +55,7 @@
 
         <el-table-column prop="price"
                          label="商品价格"
+                         align="center"
                          sortable
                          fit>
           <template slot-scope="scope">
@@ -60,6 +65,7 @@
 
         <el-table-column prop="num"
                          label="更新日期"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.outDate}}</span>
@@ -68,6 +74,7 @@
 
         <el-table-column prop="desc"
                          label="操作员"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.employeeAccount }}</span>

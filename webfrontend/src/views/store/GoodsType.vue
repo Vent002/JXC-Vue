@@ -14,6 +14,7 @@
         <div class="el-add">
           <el-button slot="reference"
                      type="primary"
+                     size="small"
                      style="float: left"
                      @click="addFormVisible = true">
             <i class="el-icon-plus"></i>

@@ -128,8 +128,8 @@
         </el-form-item>
 
         <el-form-item label="是否通过"
-                      prop="applyStatus">
-          <el-switch v-model="verifyApplyInfo.applyStatus"></el-switch>
+                      prop="verifyApplyStatus">
+          <el-switch v-model="verifyApplyInfo.verifyApplyStatus"></el-switch>
         </el-form-item>
 
         <el-form-item label="否决原因"
@@ -173,7 +173,8 @@ export default {
         applyGoodsName: '',
         applyCounts: Number,
         applyPersonName: '',
-        applyStatus: false,
+        applyStatus: '',
+        verifyApplyStatus:false,
         applyDesc: '',
         inventoryInfo: {
           goodsTypeInfo: {
@@ -219,7 +220,6 @@ export default {
         url: '/api/apply/history/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
-          console.log(res)
           let salesInfoResult = JSON.parse(res.data.applyList)
           this.applyGoodsList = salesInfoResult.list
           this.total = salesInfoResult.total
@@ -232,20 +232,25 @@ export default {
         })
     },
     verifySubmit(verifyInfo) {
-      if (!verifyInfo.applyStatus&&verifyInfo=='') {
+      console.log(verifyInfo)
+      if (!verifyInfo.verifyApplyStatus && verifyInfo.applyDesc=='') {
         alert('请输入否决原因 ')
         return
       } else {
         this.btnloading = true
         let applyInfo = new Object(verifyInfo)
-        console.log(applyInfo)
+        if(verifyInfo.verifyApplyStatus){
+          applyInfo.applyStatus = 1
+        }else{
+          applyInfo.applyStatus = 2
+        }
+        console.log(applyInfo.applyStatus)
         request({
           method: 'put',
           url: '/api/apply/' + verifyInfo.id,
           data: applyInfo
         })
           .then(res => {
-            console.log(res)
             if (res.code === 200) {
               this.editFormVisible = false
               this.$message({
@@ -291,7 +296,6 @@ export default {
         url: '/api/apply/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
-          console.log(res)
           let salesInfoResult = JSON.parse(res.data.applyList)
           this.applyGoodsList = salesInfoResult.list
           this.total = salesInfoResult.total

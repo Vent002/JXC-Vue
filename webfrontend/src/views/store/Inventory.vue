@@ -29,11 +29,13 @@
                     style="width: 100%">
             <el-table-column label="#"
                              type='index'
+                             align="center"
                              fit>
             </el-table-column>
 
             <el-table-column prop="goodsTypeNum"
                              label="编号"
+                             align="center"
                              sortable
                              fit>
               <template slot-scope="scope">
@@ -43,6 +45,7 @@
 
             <el-table-column prop="goodsTypeName"
                              label="名称"
+                             align="center"
                              fit>
               <template slot-scope="scope">
                 <span style="margin-left: 10px"
@@ -64,6 +67,7 @@
 
             <el-table-column prop="createDate"
                              label="创建日期"
+                             align="center"
                              sortable
                              fit>
               <template slot-scope="scope">
@@ -73,6 +77,7 @@
 
             <el-table-column prop="goodsInventory"
                              label="库存量"
+                             align="center"
                              sortable
                              fit>
               <template slot-scope="scope">
@@ -85,6 +90,7 @@
 
             <el-table-column prop="price"
                              label="价格"
+                             align="center"
                              sortable
                              fit>
               <template slot-scope="scope">
@@ -94,6 +100,7 @@
 
             <el-table-column prop="desc"
                              label="备注"
+                             align="center"
                              fit>
               <template slot-scope="scope">
                 <span style="margin-left: 10px">{{ scope.row.storeDesc }}</span>
