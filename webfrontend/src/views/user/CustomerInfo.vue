@@ -382,7 +382,6 @@
           method: 'get',
           url: `/api/customers/${this.currentPage}/${this.pageSize}`
         }).then(res => {
-          console.log(res)
           let customers = JSON.parse(res.data.customerInfos);
           this.total = customers.total;
           this.customers = customers.list;

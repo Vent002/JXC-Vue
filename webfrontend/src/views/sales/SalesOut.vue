@@ -137,10 +137,8 @@ export default {
         url: '/api/outStores/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
-          console.log(res)
           let pageInfo = JSON.parse(res.data.outStoreInfos)
           this.salesOutInfo = pageInfo.list
-          console.log(this.salesOutInfo)
           this.total = pageInfo.total
           this.loading = false
         })

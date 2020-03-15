@@ -422,7 +422,6 @@
           }).then(res => {
             let suppliers = JSON.parse(res.data.supplierInfos)
             this.suppliers = suppliers.list
-            console.log(this.suppliers)
             this.total = suppliers.total
             this.loading = false
           }).catch(err => {

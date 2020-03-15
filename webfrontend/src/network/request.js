@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-16 13:59:52
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-14 19:43:49
+ * @LastEditTime: 2020-03-15 21:21:17
  * @FilePath: \webfrontend\src\network\request.js
  */
 import axios from 'axios'
@@ -11,7 +11,7 @@ import { Message } from 'element-ui'
 export function request(config) {
   return new Promise((resolve,reject) => {
     const devMode = process.env.NODE_ENV == 'development'
-    let BASE_URL = 'http://study.hsmxg1204.cn'
+    let BASE_URL = 'http://study.hsmxg1204.cn:8080/crm/'
     if(devMode){
       BASE_URL = 'http://127.0.0.1:8443'
     }
@@ -32,12 +32,19 @@ export function request(config) {
         config.headers.Authorization = `${sessionStorage.getItem('Authorization')}`
       }
       config.url = config.url.slice(4)
+
       return config
     },error => {
       return reject(error);
     })
     // 响应拦截
     instance.interceptors.response.use(res => {
+
+      if(res.data.code == 253){
+        alert("登录过期，请重新登录")
+        router.replace({path:'/login'})
+        return new Promise(() => {})
+      }
       switch (res && res.data.code) {
         case 1001:
           //console.log('用户名或密码错误')
@@ -47,14 +54,8 @@ export function request(config) {
           router.go(0)
           return false
         case 404:
-          router.replace({
-            path:'/404'
-          })
-          break
-        case 253:
-          alert("登录过期，请重新登录")
           router.push({
-            path:'/login'
+            path:'/404'
           })
           break
         case 500:
@@ -66,7 +67,7 @@ export function request(config) {
           router.go(0)
           return false
         case 10002:
-          alert('输入有误')
+          Message.error('error')
           return false
       }
       return resolve(res.data)

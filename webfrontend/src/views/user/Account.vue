@@ -184,7 +184,6 @@ export default {
         url: `/api/accounts/${this.currentPage}/${this.pageSize}`
       })
         .then(res => {
-          console.log(res)
           let pageInfo = JSON.parse(res.data.accountInfos)
           this.accounts = pageInfo.list
           console.log(this.accounts[0].employeeInfo.employeeName)

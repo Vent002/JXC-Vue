@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { Form } from 'element-ui'
 
 const Login =() => import('@/views/Login')
 const Home =() => import('@/views/Home')
@@ -178,6 +179,11 @@ router.beforeEach((to,from,next) => {
     }else{
       next()
     }
+  }
+  if(to.path === '/404'){
+    setTimeout(() => {
+      next(from.path)
+    }, 5000);
   }
 })
 

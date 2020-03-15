@@ -10,7 +10,16 @@
     </bread-crumb>
     <el-card class="applyGoodsCard">
       <div style="text-align:left">
-        <el-button size="small" type="primary" @click="getHistory()" :loading="btnloading">历史记录</el-button>
+        <el-button size="small"
+                   type="primary"
+                   v-if="showHistory"
+                   @click="getHistory()"
+                   :loading="btnloading">历史记录</el-button>
+        <el-button size="small"
+                   type="primary"
+                   v-if="back"
+                   @click="getApplyGoodsInfo()"
+                   :loading="btnloading">返回</el-button>
       </div>
 
       <el-table fit
@@ -18,11 +27,13 @@
                 style="width: 100%">
         <el-table-column label="#"
                          type='index'
+                         align="center"
                          fit>
         </el-table-column>
 
         <el-table-column prop="num"
                          label="登记日期"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.applyDate }}</span>
@@ -31,6 +42,7 @@
 
         <el-table-column prop="name"
                          label="商品名称"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.inventoryInfo.goodsTypeInfo.goodsTypeName }}</span>
@@ -39,6 +51,7 @@
 
         <el-table-column prop="date"
                          label="申请数量"
+                         align="center"
                          sortable
                          fit>
           <template slot-scope="scope">
@@ -48,14 +61,16 @@
 
         <el-table-column prop="employeeAccount"
                          label="申请人"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.applyPersonName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column prop="employeeAccount"
+        <el-table-column v-if="operate"
                          label="操作"
+                         align="center"
                          fit>
           <template slot-scope="scope">
             <el-button size="small"
@@ -64,6 +79,16 @@
                        type="success"
                        icon="el-icon-check"
                        circle></el-button>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="verifyDate"
+                         v-if="verifyDate"
+                         label="审核日期"
+                         align="center"
+                         fit>
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.verifyDate }}</span>
           </template>
         </el-table-column>
 
@@ -164,6 +189,12 @@ export default {
   },
   data() {
     return {
+      //button
+      showHistory: true,
+      back: false,
+      //table
+      operate: true,
+      verifyDate: false,
       //商品名称
       selectGoodsTypeName: [],
       //审核出库数据
@@ -174,7 +205,7 @@ export default {
         applyCounts: Number,
         applyPersonName: '',
         applyStatus: '',
-        verifyApplyStatus:false,
+        verifyApplyStatus: false,
         applyDesc: '',
         inventoryInfo: {
           goodsTypeInfo: {
@@ -213,13 +244,17 @@ export default {
     })
   },
   methods: {
-    getHistory(){
+    getHistory() {
       this.btnloading = true
       request({
         method: 'get',
         url: '/api/apply/history/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
+          this.showHistory = false
+          this.back = true
+          this.operate = false
+          this.verifyDate = true
           let salesInfoResult = JSON.parse(res.data.applyList)
           this.applyGoodsList = salesInfoResult.list
           this.total = salesInfoResult.total
@@ -233,15 +268,15 @@ export default {
     },
     verifySubmit(verifyInfo) {
       console.log(verifyInfo)
-      if (!verifyInfo.verifyApplyStatus && verifyInfo.applyDesc=='') {
+      if (!verifyInfo.verifyApplyStatus && verifyInfo.applyDesc == '') {
         alert('请输入否决原因 ')
         return
       } else {
         this.btnloading = true
         let applyInfo = new Object(verifyInfo)
-        if(verifyInfo.verifyApplyStatus){
+        if (verifyInfo.verifyApplyStatus) {
           applyInfo.applyStatus = 1
-        }else{
+        } else {
           applyInfo.applyStatus = 2
         }
         console.log(applyInfo.applyStatus)
@@ -259,9 +294,9 @@ export default {
               })
               this.getApplyGoodsInfo()
               this.btnloading = false
-            }else{
+            } else {
               this.btnloading = false
-              this.$message.error("未完成")
+              this.$message.error('未完成')
             }
           })
           .catch(err => {
@@ -296,6 +331,10 @@ export default {
         url: '/api/apply/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
+          this.showHistory = true
+          this.back = false
+          this.operate = true
+          this.verifyDate = false
           let salesInfoResult = JSON.parse(res.data.applyList)
           this.applyGoodsList = salesInfoResult.list
           this.total = salesInfoResult.total

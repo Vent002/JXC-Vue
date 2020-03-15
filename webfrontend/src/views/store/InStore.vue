@@ -13,22 +13,28 @@
         <el-button size="small"
                    type="primary"
                    @click="getHistory()"
+                   v-if="showHistory"
                    :loading="btnLoading">历史记录</el-button>
+        <el-button size="small"
+                   type="primary"
+                   v-if="showInfo"
+                   @click="getInInventoryInfos()"
+                   :loading="btnLoading">返回</el-button>
       </div>
 
       <el-table fit
                 :data="verifyOrderGoodsInfoList"
                 style="width: 100%">
         <el-table-column type="expand">
-          <template slot-scope="scope">
+          <template slot-scope="scope" v-if="scope.row.goodsTypeInfo != null">
             <el-form label-position="left"
                      inline
                      class="table-expand">
               <el-form-item label="供货商姓名">
-                <span style="color:red">{{ scope.row.orderPersonInfo.supplierInfo.supplierName }}</span>
+                <span style="color:red">{{ scope.row.goodsTypeInfo.supplierInfo.supplierName }}</span>
               </el-form-item>
               <el-form-item label="联系方式">
-                <span style="color:red">{{ scope.row.orderPersonInfo.supplierInfo.supplierPhone }}</span>
+                <span style="color:red">{{ scope.row.goodsTypeInfo.supplierInfo.supplierPhone }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -87,8 +93,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="employeeAccount"
+        <el-table-column
                          label="操作"
+                         v-if="operate"
                          fit>
           <template slot-scope="scope">
             <el-button size="small"
@@ -97,6 +104,14 @@
                        type="success"
                        icon="el-icon-check"
                        circle></el-button>
+          </template>
+        </el-table-column>
+        <el-table-column 
+                         label="入库时间"
+                         v-else-if="history"
+                         fit>
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.orderInInventory.verifyDate }}</span>
           </template>
         </el-table-column>
 
@@ -203,6 +218,10 @@ export default {
   },
   data() {
     return {
+      showHistory:true,
+      showInfo:false,
+      history:false,
+      operate:true,
       addInventoryInfo: {
         id: Number,
         orderNum: '',
@@ -274,6 +293,10 @@ export default {
         url: '/api/orders/history/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
+          this.operate = false
+          this.showHistory = false
+          this.history = true
+          this.showInfo = true
           let orderGoodsList = JSON.parse(res.data.orderGoodsList)
           this.verifyOrderGoodsInfoList = orderGoodsList.list
           this.total = orderGoodsList.total
@@ -306,6 +329,10 @@ export default {
         url: '/api/orders/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
+          this.showHistory = true
+          this.showInfo = false
+          this.history = false
+          this.operate = true
           let orderGoodsList = JSON.parse(res.data.orderGoodsList)
           this.verifyOrderGoodsInfoList = orderGoodsList.list
           this.total = orderGoodsList.total

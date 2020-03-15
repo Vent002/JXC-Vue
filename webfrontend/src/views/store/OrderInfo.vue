@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-02-12 18:19:18
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-14 20:52:31
+ * @LastEditTime: 2020-03-15 20:13:25
  * @FilePath: \webfrontend\src\views\store\OrderInfo.vue
  -->
 <template>
@@ -40,15 +40,15 @@
                 :data="orderGoodsInfoList"
                 style="width: 100%">
         <el-table-column type="expand">
-          <template slot-scope="scope">
+          <template slot-scope="scope" v-if="scope.row.goodsTypeInfo !=null">
             <el-form label-position="left"
                      inline
                      class="table-expand">
               <el-form-item label="供货商姓名">
-                <span style="color:red">{{ scope.row.orderPersonInfo.supplierInfo.supplierName }}</span>
+                <span style="color:red">{{ scope.row.goodsTypeInfo.supplierInfo.supplierName }}</span>
               </el-form-item>
               <el-form-item label="联系方式">
-                <span style="color:red">{{ scope.row.orderPersonInfo.supplierInfo.supplierPhone }}</span>
+                <span style="color:red">{{ scope.row.goodsTypeInfo.supplierInfo.supplierPhone }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -259,7 +259,6 @@ export default {
         if(valid){
           this.btnLoading = true
           let orderInfo = new Object(this.formOrderInfo)
-          console.log(this.formOrderInfo)
           request({
             method:'post',
             url:'/api/order',
@@ -295,8 +294,10 @@ export default {
         url: '/api/orders/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
+          console.log(res)
           let orderGoodsList = JSON.parse(res.data.orderGoodsList)
           this.orderGoodsInfoList = orderGoodsList.list
+          console.log(this.orderGoodsInfoList)
           this.total = orderGoodsList.total
           this.loading = false
         })

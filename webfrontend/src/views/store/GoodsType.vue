@@ -291,7 +291,6 @@ export default {
         url: `/api/goods/${this.currentPage}/${this.pageSize}`
       })
         .then(res => {
-          console.log(res)
           let pageInfo = JSON.parse(res.data.goodsTypeInfos)
 
           this.goods = pageInfo.list
