@@ -26,7 +26,8 @@
                 :data="verifyOrderGoodsInfoList"
                 style="width: 100%">
         <el-table-column type="expand">
-          <template slot-scope="scope" v-if="scope.row.goodsTypeInfo != null">
+          <template slot-scope="scope"
+                    v-if="scope.row.goodsTypeInfo != null">
             <el-form label-position="left"
                      inline
                      class="table-expand">
@@ -93,8 +94,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column
-                         label="操作"
+        <el-table-column label="操作"
                          v-if="operate"
                          fit>
           <template slot-scope="scope">
@@ -106,11 +106,11 @@
                        circle></el-button>
           </template>
         </el-table-column>
-        <el-table-column 
-                         label="入库时间"
+        <el-table-column label="入库时间"
                          v-else-if="history"
                          fit>
-          <template slot-scope="scope">
+          <template slot-scope="scope"
+                    v-if="scope.row != null">
             <span style="margin-left: 10px">{{ scope.row.orderInInventory.verifyDate }}</span>
           </template>
         </el-table-column>
@@ -218,10 +218,10 @@ export default {
   },
   data() {
     return {
-      showHistory:true,
-      showInfo:false,
-      history:false,
-      operate:true,
+      showHistory: true,
+      showInfo: false,
+      history: false,
+      operate: true,
       addInventoryInfo: {
         id: Number,
         orderNum: '',
@@ -269,14 +269,15 @@ export default {
           .then(res => {
             this.btnLoading = false
             this.addInventoryInfoVisible = false
-           if(res.code === 200){
-             this.$message({
-              type:'success',
-              message:'入库成功'
-            })
-           }else if(res.code === 10004){
-             this.$message.error('已完成订单不能再修改')
-           } 
+            if (res.code === 200) {
+              this.$message({
+                type: 'success',
+                message: '入库成功'
+              })
+              getInInventoryInfos()
+            } else if (res.code === 10004) {
+              this.$message.error('已完成订单不能再修改')
+            }
           })
           .catch(err => {
             this.btnLoading = false
@@ -315,12 +316,20 @@ export default {
     handleSizeChange(size) {
       this.currentPage = 1 //第一页
       this.pageSize = size //每页先显示多少数据
-      this.getInventoryInfos()
+      if (this.showHistory) {
+        this.getInInventoryInfos()
+      } else {
+        this.getHistory()
+      }
     },
     //当前页
     handleCurrentChange(page) {
       this.currentPage = page
-      this.getInventoryInfos()
+      if (this.showHistory) {
+        this.getInInventoryInfos()
+      } else {
+        this.getHistory()
+      }
     },
     getInInventoryInfos() {
       this.loading = true

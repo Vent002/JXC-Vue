@@ -52,7 +52,7 @@
       outSystem(){
         this.$router.push('/')
         setTimeout(() =>{
-          localStorage.removeItem("Authorization");
+          sessionStorage.removeItem("Authorization");
         },3000)
       }
     },

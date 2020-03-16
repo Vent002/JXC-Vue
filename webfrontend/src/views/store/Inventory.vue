@@ -208,7 +208,6 @@ export default {
         url: '/api/inventories/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
-          console.log(res)
           let pageInfo = JSON.parse(res.data.inventoryInfos)
           this.pageInfo = pageInfo.list
           this.total = pageInfo.total

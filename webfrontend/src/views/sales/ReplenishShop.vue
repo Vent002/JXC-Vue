@@ -72,18 +72,18 @@
 
       </el-table>
 
- <!-- //分页 -->
-          <div class="page">
-            <el-pagination background
-                           @size-change="handleSizeChange"
-                           @current-change="handleCurrentChange"
-                           :current-page="currentPage"
-                           :page-sizes="pageSizes"
-                           :page-size="pageSize"
-                           :layout="layout"
-                           :total="total">
-            </el-pagination>
-          </div>
+      <!-- //分页 -->
+      <div class="page">
+        <el-pagination background
+                       @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       :current-page="currentPage"
+                       :page-sizes="pageSizes"
+                       :page-size="pageSize"
+                       :layout="layout"
+                       :total="total">
+        </el-pagination>
+      </div>
 
     </el-card>
 
@@ -171,33 +171,33 @@ export default {
     return {
       //申请状态
       //商品名称
-      selectGoodsTypeName:[],
+      selectGoodsTypeName: [],
       //商品数据
-      salesInfoResult:[],
-      goodsTypeInfo:[],
+      salesInfoResult: [],
+      goodsTypeInfo: [],
       //数据库获取数据
-      applyGoodsList:[],
+      applyGoodsList: [],
       //申请数据
       applyGoodsCount: {
-        goodsTypeId:Number ,
+        goodsTypeId: Number,
         goodsTypeName: '',
         goodsCount: '',
         applyName: ''
       },
-      formApplyInfoRule:{
-        goodsTypeName:[{validator:checkFormGoodsTypeName,trigger:'blur'}],
-        goodsCount:[{validator:checkFormSalesCounts,trigger:'blur'}],
+      formApplyInfoRule: {
+        goodsTypeName: [{ validator: checkFormGoodsTypeName, trigger: 'blur' }],
+        goodsCount: [{ validator: checkFormSalesCounts, trigger: 'blur' }]
       },
       formLabelWidth: '100px',
       addSalesInfoVisible: false,
-       //分页操作数据
+      //分页操作数据
       currentPage: 1, //当前页
       pageSizes: [5, 8, 10],
       total: 0,
       pageSize: 5, //每页数据
       layout: 'total, sizes, prev, pager, next, jumper',
       loading: false,
-      btnloading: false,
+      btnloading: false
     }
   },
   computed: {
@@ -206,69 +206,74 @@ export default {
       userAccount: 'USER_ACCOUNT'
     })
   },
-  methods:{
+  methods: {
     //获取当前用户申请信息
-    getApplyInfoByEmployeeName(){
+    getApplyInfoByEmployeeName() {
       this.loading = true
       let userAccount = this.userAccount
       request({
-        method:'get',
-        url:`/api/apply/employee/${this.currentPage}/${this.pageSize}/query?query=${userAccount}`
-      }).then(res =>{
-        let result = JSON.parse(res.data.applyList)
-        this.applyGoodsList = result.list
-        this.total = result.total
-        this.loading = false
-      }).catch(err => {
-        console.log(err)
+        method: 'get',
+        url: `/api/apply/employee/${this.currentPage}/${this.pageSize}/query?query=${userAccount}`
       })
+        .then(res => {
+          
+          let result = JSON.parse(res.data.applyList)
+          this.applyGoodsList = result.list
+          this.total = result.total
+          this.loading = false
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     //申请
-    applyGoodsInfo(){
-      this.$refs.formApplyInfoRule.validate(valid =>{
-        if(valid){
+    applyGoodsInfo() {
+      this.$refs.formApplyInfoRule.validate(valid => {
+        if (valid) {
           this.btnloading = true
           this.applyGoodsCount.applyName = this.userAccount
-          this.salesInfoResult.forEach(element =>{
-            if(element.goodsTypeName === this.applyGoodsCount.goodsTypeName){
+          this.salesInfoResult.forEach(element => {
+            if (element.goodsTypeName === this.applyGoodsCount.goodsTypeName) {
               this.applyGoodsCount.goodsTypeId = element.goodsTypeId
               return
             }
           })
           let data = new Object(this.applyGoodsCount)
-          applyGoodsToShop(data).then(res => {
-            if(res.code === 200){
-              this.addSalesInfoVisible = false
+          applyGoodsToShop(data)
+            .then(res => {
+              if (res.code === 200) {
+                this.addSalesInfoVisible = false
+                this.btnloading = false
+                this.$message({
+                  type: 'success',
+                  message: '申请成功，请等待审核'
+                })
+                this.getApplyInfoByEmployeeName()
+              } else {
+                this.$message.error('申请失败，请重新申请')
+                this.btnloading = false
+              }
+            })
+            .catch(err => {
               this.btnloading = false
-              this.$message({
-                type:'success',
-                message:'申请成功，请等待审核'
-              })
-              this.getApplyInfoByEmployeeName()
-            }else{
-              this.$message.error("申请失败，请重新申请")
-              this.btnloading = false
-            }
-          }).catch(err =>{
-            this.btnloading = false
-            console.log(err)
-          })
+              console.log(err)
+            })
         }
       })
     },
 
-    closeApplyGoodsDialog(){
+    closeApplyGoodsDialog() {
       this.applyGoodsCount = {}
       this.addSalesInfoVisible = false
     },
     handleSizeChange(size) {
       this.currentPage = 1 //第一页
       this.pageSize = size //每页先显示多少数据
-      this.getSalesPageInfo()
+      this.getApplyInfoByEmployeeName()
     },
     handleCurrentChange(page) {
       this.currentPage = page
-      this.getSalesPageInfo()
+      this.getApplyInfoByEmployeeName()
     },
     getGoodsName() {
       this.loading = true
@@ -285,10 +290,10 @@ export default {
               this.salesInfoResult[key].goodsTypeName
             )
           }
-          for(let key in this.salesInfoResult){
+          for (let key in this.salesInfoResult) {
             this.goodsTypeInfo.push({
-              goodsTypeId:this.salesInfoResult[key].goodsTypeId,
-              goodsTypeName:this.salesInfoResult[key].goodsTypeName
+              goodsTypeId: this.salesInfoResult[key].goodsTypeId,
+              goodsTypeName: this.salesInfoResult[key].goodsTypeName
             })
           }
           this.loading = false
@@ -298,9 +303,9 @@ export default {
           this.loading = false
           //刷新页面
         })
-    },
+    }
   },
-  created(){
+  created() {
     this.getGoodsName()
     this.getApplyInfoByEmployeeName()
   }
@@ -308,10 +313,10 @@ export default {
 </script>
 
 <style scoped>
-.applyGoodsCard{
+.applyGoodsCard {
   margin: 20px 0;
 }
-.applyGoods{
+.applyGoods {
   text-align: left;
 }
 </style>

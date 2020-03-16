@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-02-14 19:41:22
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-10 13:54:43
+ * @LastEditTime: 2020-03-15 21:59:51
  * @FilePath: \webfrontend\src\components\BreadCrumb.vue
  -->
 <template>
@@ -9,7 +9,7 @@
     <div class="el-breadcrumbSlot">
       <slot> 
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <slot name="index"><el-breadcrumb-item :to="{ path: '/main' }">首页</el-breadcrumb-item></slot>
+          <slot name="index"><el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item></slot>
           <slot name="first"><el-breadcrumb-item></el-breadcrumb-item></slot>
           <slot name="second"><el-breadcrumb-item></el-breadcrumb-item></slot>
         </el-breadcrumb>

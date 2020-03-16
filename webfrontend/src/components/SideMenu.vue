@@ -1,14 +1,14 @@
 <!--
  * @Date: 2020-02-14 13:21:09
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-15 15:40:40
+ * @LastEditTime: 2020-03-15 21:51:25
  * @FilePath: \webfrontend\src\components\SideMenu.vue
  -->
 <template>
   <div class="aside">
     <el-row>
       <el-menu router
-               default-active="2"
+               :default-active="this.$route.path"
                @open="handleOpen"
                @close="handleClose"
                background-color="#eeeeee"

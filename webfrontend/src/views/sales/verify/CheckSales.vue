@@ -61,31 +61,31 @@
                          align="center"
                          fit>
           <template slot-scope="scope">
-            <div slot="reference" class="name-wrapper">
-            <el-switch
-              @change="verifyStatus(scope.row)"
-              v-model="scope.row.status"
-              active-color="#13ce66"
-              inactive-color="#ff4949">
-            </el-switch>
-          </div>
+            <div slot="reference"
+                 class="name-wrapper">
+              <el-switch @change="verifyStatus(scope.row)"
+                         v-model="scope.row.status"
+                         active-color="#13ce66"
+                         inactive-color="#ff4949">
+              </el-switch>
+            </div>
           </template>
         </el-table-column>
 
       </el-table>
 
- <!-- //分页 -->
-          <div class="page">
-            <el-pagination background
-                           @size-change="handleSizeChange"
-                           @current-change="handleCurrentChange"
-                           :current-page="currentPage"
-                           :page-sizes="pageSizes"
-                           :page-size="pageSize"
-                           :layout="layout"
-                           :total="total">
-            </el-pagination>
-          </div>
+      <!-- //分页 -->
+      <div class="page">
+        <el-pagination background
+                       @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       :current-page="currentPage"
+                       :page-sizes="pageSizes"
+                       :page-size="pageSize"
+                       :layout="layout"
+                       :total="total">
+        </el-pagination>
+      </div>
 
     </el-card>
 
@@ -105,15 +105,15 @@ export default {
   data() {
     return {
       //数据库获取数据
-      verifyGoodsInfo:[],
-       //分页操作数据
+      verifyGoodsInfo: [],
+      //分页操作数据
       currentPage: 1, //当前页
       pageSizes: [5, 8, 10],
       total: 0,
       pageSize: 5, //每页数据
       layout: 'total, sizes, prev, pager, next, jumper',
       loading: false,
-      btnloading: false,
+      btnloading: false
     }
   },
   computed: {
@@ -122,39 +122,42 @@ export default {
       userAccount: 'USER_ACCOUNT'
     })
   },
-  methods:{
-    verifyStatus(goods){
+  methods: {
+    verifyStatus(goods) {
       let goodsId = goods.id
 
-      updateSalesStatus(goodsId).then(res => {
-
-        this.applyGoodsInfo()
-        this.$message({
-            type: 'success',
-            message: '已审核'
-          });
-      }).catch(err =>{
-        console.log(err)
-      })
+      updateSalesStatus(goodsId)
+        .then(res => {
+          if (res.code === 200) {
+            this.applyGoodsInfo()
+            this.$message({
+              type: 'success',
+              message: '已审核'
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
-    applyGoodsInfo(){
+    applyGoodsInfo() {
       this.loading = true
       request({
         method: 'get',
-        url: '/api/sales/verify/'+this.currentPage+'/'+this.pageSize
-      }).then(res => {
-        let salesInfoResult = JSON.parse(res.data.verifySales)
-        console.log(salesInfoResult)
-        this.verifyGoodsInfo = salesInfoResult.list
-        this.total = salesInfoResult.total
-        this.loading = false
+        url: '/api/sales/verify/' + this.currentPage + '/' + this.pageSize
       })
-      .catch(err => {
-        console.log(err)
-        this.loading = false
-        //alert(err)
-        //刷新页面
-      })
+        .then(res => {
+          let salesInfoResult = JSON.parse(res.data.verifySales)
+          this.verifyGoodsInfo = salesInfoResult.list
+          this.total = salesInfoResult.total
+          this.loading = false
+        })
+        .catch(err => {
+          console.log(err)
+          this.loading = false
+          //alert(err)
+          //刷新页面
+        })
     },
     handleSizeChange(size) {
       this.currentPage = 1 //第一页
@@ -164,19 +167,19 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page
       this.applyGoodsInfo()
-    },
+    }
   },
-  created(){
+  created() {
     this.applyGoodsInfo()
   }
 }
 </script>
 
 <style scoped>
-.applyGoodsCard{
+.applyGoodsCard {
   margin: 20px 0;
 }
-.applyGoods{
+.applyGoods {
   text-align: left;
 }
 </style>

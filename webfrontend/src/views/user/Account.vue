@@ -186,7 +186,6 @@ export default {
         .then(res => {
           let pageInfo = JSON.parse(res.data.accountInfos)
           this.accounts = pageInfo.list
-          console.log(this.accounts[0].employeeInfo.employeeName)
           this.total = pageInfo.total
           this.loading = false
         })

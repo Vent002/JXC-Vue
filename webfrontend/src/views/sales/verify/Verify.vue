@@ -149,7 +149,8 @@
           <el-input type="number"
                     :min="0"
                     style="width:50%;min-width:80px"
-                    v-model="verifyApplyInfo.applyCounts"></el-input>
+                    v-model="verifyApplyInfo.applyCounts"></el-input><br/>
+                    <span  v-if="isAbundant">剩余库存：<span style="color:red;margin-left:5px">{{inventory}}</span></span>
         </el-form-item>
 
         <el-form-item label="是否通过"
@@ -189,6 +190,9 @@ export default {
   },
   data() {
     return {
+      //剩余库存
+      inventory:Number,
+      isAbundant:false,
       //button
       showHistory: true,
       back: false,
@@ -267,7 +271,6 @@ export default {
         })
     },
     verifySubmit(verifyInfo) {
-      console.log(verifyInfo)
       if (!verifyInfo.verifyApplyStatus && verifyInfo.applyDesc == '') {
         alert('请输入否决原因 ')
         return
@@ -279,7 +282,6 @@ export default {
         } else {
           applyInfo.applyStatus = 2
         }
-        console.log(applyInfo.applyStatus)
         request({
           method: 'put',
           url: '/api/apply/' + verifyInfo.id,
@@ -290,13 +292,19 @@ export default {
               this.editFormVisible = false
               this.$message({
                 type: 'success',
-                message: '审核完成，请安排人员送货'
+                message: '审核完成'
               })
               this.getApplyGoodsInfo()
               this.btnloading = false
-            } else {
+            }
+            if(res.code === 10002){
               this.btnloading = false
-              this.$message.error('未完成')
+              this.isAbundant = true
+              this.inventory  = res.data.inventoryTotal
+              this.$message({
+                type:'warning',
+                message:'剩余库存不足'
+              })
             }
           })
           .catch(err => {
@@ -314,15 +322,24 @@ export default {
 
     closeEditSubmit() {
       this.editFormVisible = false
+      this.isAbundant = false
     },
     handleSizeChange(size) {
       this.currentPage = 1 //第一页
       this.pageSize = size //每页先显示多少数据
-      this.getApplyGoodsInfo()
+      if(this.showHistory){
+        this.getApplyGoodsInfo()
+      }else{
+        this.getHistory()
+      }
     },
     handleCurrentChange(page) {
       this.currentPage = page
-      this.getApplyGoodsInfo()
+      if(this.showHistory){
+        this.getApplyGoodsInfo()
+      }else{
+        this.getHistory()
+      }
     },
     getApplyGoodsInfo() {
       this.loading = true

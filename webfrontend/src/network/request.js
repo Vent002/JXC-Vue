@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-16 13:59:52
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-15 21:21:17
+ * @LastEditTime: 2020-03-16 11:14:07
  * @FilePath: \webfrontend\src\network\request.js
  */
 import axios from 'axios'
@@ -66,9 +66,7 @@ export function request(config) {
           alert('不能修改自己的状态');
           router.go(0)
           return false
-        case 10002:
-          Message.error('error')
-          return false
+          break
       }
       return resolve(res.data)
     },error => {

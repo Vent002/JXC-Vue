@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-12 15:38:22
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-14 19:58:50
+ * @LastEditTime: 2020-03-16 12:08:31
  * @FilePath: \webfrontend\src\main.js
  */
 import Vue from 'vue'
@@ -12,7 +12,7 @@ import axios from 'axios'
 import qs from 'qs'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
+import 'default-passive-events'
 
 Vue.use(Element)
 

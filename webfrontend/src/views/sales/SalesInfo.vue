@@ -53,6 +53,7 @@
                       ]"> -->
                   <el-form-item>
                     <el-input size="small"
+                              clearable
                               type="searchEmployeeName"
                               placeholder="输入搜索姓名"
                               v-model="formSearchName.searchEmployeeName"

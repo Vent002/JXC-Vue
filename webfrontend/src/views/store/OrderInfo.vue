@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-02-12 18:19:18
  * @LastEditors: gxm
- * @LastEditTime: 2020-03-15 20:13:25
+ * @LastEditTime: 2020-03-15 22:37:32
  * @FilePath: \webfrontend\src\views\store\OrderInfo.vue
  -->
 <template>
@@ -294,10 +294,8 @@ export default {
         url: '/api/orders/' + this.currentPage + '/' + this.pageSize
       })
         .then(res => {
-          console.log(res)
           let orderGoodsList = JSON.parse(res.data.orderGoodsList)
           this.orderGoodsInfoList = orderGoodsList.list
-          console.log(this.orderGoodsInfoList)
           this.total = orderGoodsList.total
           this.loading = false
         })
